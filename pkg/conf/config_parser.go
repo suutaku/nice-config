@@ -53,6 +53,10 @@ func NewConfigureParser(home string, fileName string) *ConfigureParser {
 	if ret.m == nil {
 		panic(fmt.Sprintf("unimplementation marshaller for extension %s", mName))
 	}
+	err = os.Chdir(home)
+	if err != nil {
+		panic(err)
+	}
 	return ret
 }
 

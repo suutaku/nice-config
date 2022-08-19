@@ -1,7 +1,9 @@
 package conf
 
 import (
-	"github.com/naoina/toml"
+	"bytes"
+
+	"github.com/BurntSushi/toml"
 )
 
 type Toml struct {
@@ -16,7 +18,9 @@ func (tm *Toml) Type() string {
 }
 
 func (tm *Toml) Marshal(input interface{}) ([]byte, error) {
-	return toml.Marshal(input)
+	buf := bytes.Buffer{}
+	err := toml.NewEncoder(&buf).Encode(input)
+	return buf.Bytes(), err
 }
 
 func (tm *Toml) Unmarshal(input []byte, output interface{}) error {
