@@ -37,7 +37,6 @@ func NewConfigureParser(home string, fileName string) *ConfigureParser {
 				panic(err)
 			}
 		}
-		panic(err)
 	}
 	ret.exten = filepath.Ext(fileName)
 	ret.name = strings.TrimSuffix(fileName, ret.exten)
