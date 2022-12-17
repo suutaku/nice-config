@@ -3,7 +3,7 @@ package conf
 import (
 	"bytes"
 
-	"github.com/BurntSushi/toml"
+	toml "github.com/pelletier/go-toml/v2"
 )
 
 type Toml struct {
