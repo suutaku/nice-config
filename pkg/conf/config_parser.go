@@ -16,10 +16,11 @@ const (
 )
 
 type ConfigureParser struct {
-	home  string
-	name  string
-	exten string
-	m     Marshaller
+	home    string
+	subPath string
+	name    string
+	exten   string
+	m       Marshaller
 }
 
 func NewConfigureParser(home string, fileName string) *ConfigureParser {
@@ -41,9 +42,12 @@ func NewConfigureParser(home string, fileName string) *ConfigureParser {
 		}
 	}
 
+	err = os.Chdir(home)
+
 	// File Name maybe have path not just a base filename
 	dir := filepath.Dir(fileName)
 	if dir != "" {
+		ret.subPath = dir
 		_, err := os.Stat(dir)
 		if os.IsNotExist(err) {
 			err = os.MkdirAll(dir, 0766)
@@ -67,7 +71,6 @@ func NewConfigureParser(home string, fileName string) *ConfigureParser {
 	if ret.m == nil {
 		panic(fmt.Sprintf("unimplementation marshaller for extension %s", mName))
 	}
-	err = os.Chdir(home)
 	if err != nil {
 		panic(err)
 	}
@@ -98,7 +101,7 @@ func (cnf *ConfigureParser) Load(ouput interface{}) error {
 
 // save input to config file
 func (cnf *ConfigureParser) Save(input interface{}) error {
-	f, err := os.OpenFile(path.Join(cnf.home, cnf.name+cnf.exten), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	f, err := os.OpenFile(path.Join(cnf.home, cnf.subPath, cnf.name+cnf.exten), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
 		return err
 	}
