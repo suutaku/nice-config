@@ -29,6 +29,8 @@ func NewConfigureParser(home string, fileName string) *ConfigureParser {
 		panic(err)
 	}
 	ret.home = absPath
+
+	// Create home dir if not exist.
 	_, err = os.Stat(absPath)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -38,6 +40,19 @@ func NewConfigureParser(home string, fileName string) *ConfigureParser {
 			}
 		}
 	}
+
+	// File Name maybe have path not just a base filename
+	dir := filepath.Dir(fileName)
+	if dir != "" {
+		_, err := os.Stat(dir)
+		if os.IsNotExist(err) {
+			err = os.MkdirAll(dir, 0766)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+	fileName = filepath.Base(fileName)
 	ret.exten = filepath.Ext(fileName)
 	ret.name = strings.TrimSuffix(fileName, ret.exten)
 	if ret.exten == "" {
