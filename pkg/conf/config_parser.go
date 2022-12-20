@@ -89,7 +89,7 @@ func (cnf *ConfigureParser) LoadWithMerge(output interface{}, toMerge interface{
 // load config to output
 func (cnf *ConfigureParser) Load(ouput interface{}) error {
 	// read file
-	fileBytes, err := os.ReadFile(path.Join(cnf.home, cnf.name+cnf.exten))
+	fileBytes, err := os.ReadFile(path.Join(cnf.home, cnf.subPath, cnf.name+cnf.exten))
 	if err != nil {
 		if !os.IsExist(err) {
 			return nil
